@@ -1,0 +1,82 @@
+;### status ###
+
+(defpoll battery
+  :interval "5s"
+  :initial "[battery]"
+  :run-while true
+  `~/.config/eww/scripts/get_battery`)
+
+(defpoll temperature
+  :interval "5s"
+  :initial "[temperature]"
+  :run-while true
+  `~/.config/eww/scripts/get_temperature`)
+
+(defwidget status []
+  (box :orientation "h"
+       :space-evenly false
+       :class "boxy" 
+       (label :class "battery" :text battery)
+       (label :class "temperature" :text temperature)))
+
+;### window title ###
+
+(deflisten window_title :initial "Desktop" "~/.config/eww/scripts/get_window_title")
+
+(defwidget window_title []
+  (box :class "boxy window_title"
+    (label :text "${window_title == "" || window_title == "null" ? "Desktop" : window_title}")))
+
+;### workspaces ###
+
+(deflisten workspaces :initial "[]" "~/.config/eww/scripts/get_workspaces")
+
+(deflisten current_workspace :initial "1" "~/.config/eww/scripts/get_active_workspace")
+
+(defwidget workspaces []
+  (eventbox :onscroll "~/.config/eww/scripts/change_active_workspace {} ${current_workspace}"
+    (box :space-evenly false
+         :class "boxy workspaces"
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (box :class "workspace ${workspace.id == current_workspace ? "current" : ""} ${workspace.windows > 0 ? "occupied" : ""}"
+            (label :text "${workspace.id}")))))))
+
+;### bar ###
+
+(defwidget center_side []
+  (box :space-evenly false
+    (window_title)))
+
+(defwidget right_side []
+  (box :space-evenly false
+       :halign "end"
+    (status)))
+
+(defwidget left_side []
+  (box :space-evenly false
+    (workspaces)))
+
+(defwidget bar []
+  (centerbox :orientation "h"
+    (left_side)
+    (center_side)
+    (right_side)))
+
+;### window ###
+
+(defwindow bar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "100%"
+                      :height "30px"
+                      :anchor "top center")
+  :reserve (struts :side "top"
+                   :distance "4%")
+  :wm-ignore true
+  :stacking "fg"
+  :exclusive true
+  :focusable false
+  (bar))

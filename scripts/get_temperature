@@ -1,0 +1,17 @@
+#!/bin/sh
+
+TEMP_PATH="/sys/class/thermal/thermal_zone0/temp"
+
+temp=$(expr `cat "$TEMP_PATH"` / 1000)
+
+if [ "$temp" -gt 80 ]; then
+	icon=""
+elif [ "$temp" -gt 65 ]; then
+	icon=""
+elif [ "$temp" -gt 45 ]; then
+	icon=""
+else
+	icon=""
+fi
+
+echo "$icon $temp°C"

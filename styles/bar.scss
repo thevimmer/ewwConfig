@@ -1,0 +1,29 @@
+.bar {
+  background-color: #2F3A40;
+  .workspaces {
+    .workspace {
+      padding: 5px 10px;
+      color: #63696D;
+    }
+    .occupied {
+      color: #d8a657;
+    }
+    .current {
+      background-color: #d8a657;
+      color: #2F3A40;
+    }
+  }
+  .window_title {
+    color: #a9b667;
+  }
+  .battery {
+    background-color: #89b482;
+    color: #2F3A40;
+    padding: 5px 10px;
+  }
+  .temperature {
+    background-color: #ea6962;
+    color: #2F3A40;
+    padding: 5px 10px;
+  }
+}

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+CAPACITY_PATH="/sys/class/power_supply/BAT0/capacity"
+STATUS_PATH="/sys/class/power_supply/BAT0/status"
+
+capacity=$(cat "$CAPACITY_PATH")
+status=$(cat "$STATUS_PATH")
+
+if [ "$capacity" -gt 90 ]; then
+    icon=""
+elif [ "$capacity" -gt 75 ]; then
+    icon=""
+elif [ "$capacity" -gt 25 ];then
+    icon=""
+elif [ "$capacity" -gt 5 ];then
+    icon=""
+else
+    icon=""
+fi
+
+if [ "$status" == "Charging" ]; then
+    icon="󱐋${icon}"
+fi #NOTE what the fuck is not charging
+
+echo "$icon $capacity%"

@@ -1,0 +1,36 @@
+(defpoll time
+  :interval "10s"
+  "date '+ %a %d %b, %H:%M'")
+
+(defpoll music
+  :interval "10s"
+  'playerctl metadata --format " {{ artist }} - {{ title }}"')
+
+(defwidget time []
+  (box
+    (label :class "text"
+           :text "${time}")))
+
+(defwidget music []
+  (box
+    (label :class "text"
+           :text "${music}")))
+
+(defwidget gadgets []
+  (box
+    (time)
+    (music)))
+
+(defwindow gadgets
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "30px"
+                      :y "30px"
+                      :width "100%"
+                      :height "1px"
+                      :anchor "right top")
+  :wm-ignore true
+  :stacking "bg"
+  :exclusive false
+  :focusable false
+  (gadgets))
