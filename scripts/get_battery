@@ -18,8 +18,30 @@ else
     icon=""
 fi
 
+notified=""
+sleeped=""
 if [ "$status" == "Charging" ]; then
     icon="󱐋${icon}"
+else #NOTE this part is not about the widget
+    if [ -z notified ]; then
+        now=$(date +"%s")
+        if [ now - notified -gt 300 ]; then
+            notified=""
+        fi
+    fi
+    if [ -z sleeped ]; then
+        now=$(date +"%s")
+        if [ now - sleeped -gt 300 ]; then
+            sleeped=""
+        fi
+    fi
+    if [ "$capacity" == 10 ]; then
+        notify-send "Low Battery"
+        notified=$(date +"%s")
+    elif [ "$capacity" == 5 ]; then
+        systemctl sleep
+        sleeped=$(date +"%s")
+    fi
 fi #NOTE what the fuck is not charging
 
 echo "$icon $capacity%"
